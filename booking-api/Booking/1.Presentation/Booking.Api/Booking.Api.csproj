@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\4.Infra\Booking.Infrastructure.DatabaseEFCore\Booking.Infrastructure.DatabaseEFCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

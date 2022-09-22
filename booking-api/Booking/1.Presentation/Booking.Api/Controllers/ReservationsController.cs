@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Booking.Api.DTOs;
-using Booking.Api.ViewModels;
-using Booking.Application.Commands;
 using Booking.Domain.Exceptions;
+using Booking.Application.Interfaces;
+using Booking.Application.Contracts;
 
 namespace Booking.Api.Controllers
 {
@@ -11,37 +10,33 @@ namespace Booking.Api.Controllers
     [ApiController]
     public class ReservationsController : ApiControllerBase
     {
+        private readonly IReservationService _service;
 
-
-        public ReservationsController(
+        public ReservationsController(IReservationService reservationService
 
             )
         {
-
-
+            _service = reservationService;
         }
 
         [HttpPost]
-        //[Authorize(Roles = "user")]
-        public async Task<ActionResult<dynamic>> CreateReservation([FromBody] CreateReservationDTO model)
+        public async Task<ActionResult<CreateReservationResponse>> CreateReservation([FromBody] CreateReservationDTO dto)
         {
             try
             {
-                //var player = await _updatePlayer.ExecuteAsync(new UpdatePlayerCommand
-                //{
-                //    PlayerId = id,
-                //    FirstName = model.FirstName,
-                //    LastName = model.LastName,
-                //    Country = model.Country,
-                //    UserId = UserId
-                //});
+                var response = await _service.AddAsync(new CreateReservationRequest
+                {
+                    StartDate = dto.StartDate,
+                    EndDate = dto.EndDate,
+                    RoomId = Guid.Parse(dto.RoomId),
+                    UserId = Guid.Parse(dto.UserId),
+                });
 
-                //return Ok(player.ToViewModel());
-                return Ok();
+                return Ok(response);
             }
             catch (BusinessException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
             }
             catch (Exception)
             {
@@ -51,17 +46,47 @@ namespace Booking.Api.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        //[Authorize(Roles = "user")]
-        public async Task<ActionResult<dynamic>> UpdateReservation([FromBody] UpdateReservationDTO model, [FromRoute] Guid id)
+        public async Task<ActionResult<Response<UpdateReservationResponse>>> UpdateReservation([FromBody] UpdateReservationDTO dto, [FromRoute] string id)
         {
             try
             {
 
-                return Ok();
+                var response = await _service.UpdateAsync(new UpdateReservationRequest
+                {
+                    StartDate = dto.StartDate,
+                    EndDate = dto.EndDate,
+                    RoomId = Guid.Parse(dto.RoomId),
+                    ReservationId = Guid.Parse(id),
+                });
+
+                return Ok(response);
             }
             catch (BusinessException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new { message = e.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult<dynamic>> CancelReservation([FromRoute] string id)
+        {
+            try
+            {
+                var response = await _service.CancelAsync(new CancelReservationRequest
+                {
+                    ReservationId = Guid.Parse(id),
+                });
+
+                return Ok(response);
+            }
+            catch (BusinessException e)
+            {
+                return BadRequest(new { message = e.Message });
             }
             catch (Exception)
             {
@@ -72,12 +97,13 @@ namespace Booking.Api.Controllers
 
         [HttpGet]
         [Route("")]
-        //[Authorize(Roles = "user")]
         public async Task<ActionResult<dynamic>> Get()
         {
             try
             {
-                return Ok();
+                var response = _service.Get();
+
+                return Ok(response);
             }
             catch (Exception)
             {

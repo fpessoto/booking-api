@@ -4,6 +4,7 @@ using Booking.Infrastructure.DatabaseEFCore.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Infrastructure.DatabaseEFCore.Migrations
 {
     [DbContext(typeof(BookingDBContext))]
-    partial class BookingDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220920114336_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,16 +128,6 @@ namespace Booking.Infrastructure.DatabaseEFCore.Migrations
                             Role = "admin",
                             UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Local).AddTicks(1509),
                             Username = "admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("d6df6771-ef40-4713-81d5-a0429cd34ab9"),
-                            CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Local).AddTicks(4636),
-                            Email = "guest@gmail.com",
-                            Password = "guest",
-                            Role = "guest",
-                            UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Local).AddTicks(1509),
-                            Username = "guest"
                         });
                 });
 #pragma warning restore 612, 618

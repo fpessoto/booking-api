@@ -9,12 +9,12 @@ namespace Booking.Domain.Enums
     public enum ErrorCodes
     {
         Unauthorized = 401,
-        Forbidden = 0403,
-        NotFound = 0404,
-        AlreadyExists = 0409,
-        NotAllowed = 0405,
-        InvalidObject = 0422,
-        Unhandled = 0500,
-        ServiceUnavailable = 0503,
+        Forbidden = 403,
+        NotFound = 404,
+        AlreadyExists = 409,
+        NotAllowed = 405,
+        InvalidObject = 422,
+        Unhandled = 500,
+        ServiceUnavailable = 503,
     }
 }

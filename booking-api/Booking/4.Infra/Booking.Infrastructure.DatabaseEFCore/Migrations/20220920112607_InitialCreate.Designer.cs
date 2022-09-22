@@ -4,6 +4,7 @@ using Booking.Infrastructure.DatabaseEFCore.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Infrastructure.DatabaseEFCore.Migrations
 {
     [DbContext(typeof(BookingDBContext))]
-    partial class BookingDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220920112607_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,36 +54,6 @@ namespace Booking.Infrastructure.DatabaseEFCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TB_RESERVATION", (string)null);
-                });
-
-            modelBuilder.Entity("Booking.Domain.Rooms.Room", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TB_ROOM", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("c83a4a7c-ccfd-4625-ae23-98cf9f62ba2a"),
-                            CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Local).AddTicks(4636),
-                            Description = "The best room in the world! Beautiful view!",
-                            UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Local).AddTicks(1509)
-                        });
                 });
 
             modelBuilder.Entity("Booking.Domain.Users.User", b =>
@@ -126,16 +98,6 @@ namespace Booking.Infrastructure.DatabaseEFCore.Migrations
                             Role = "admin",
                             UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Local).AddTicks(1509),
                             Username = "admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("d6df6771-ef40-4713-81d5-a0429cd34ab9"),
-                            CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Local).AddTicks(4636),
-                            Email = "guest@gmail.com",
-                            Password = "guest",
-                            Role = "guest",
-                            UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Local).AddTicks(1509),
-                            Username = "guest"
                         });
                 });
 #pragma warning restore 612, 618

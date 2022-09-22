@@ -14,20 +14,20 @@ and can’t be reserved more than 30 days in advance.
 - Every end-user can check the room availability, place a reservation, cancel it or modify it.
 - To simplify the API is insecure. 
 
-Cases:
 
-- No downtime
-- Apenas 1 quarto disponivel. Nao deve ser possivel bookar mais de um quarto
-- Uma reserva não pode ser maior do que 3 dias. 
-- Uma reserva nao pode ser feita com 30 dias de antecedencia
-- Uma diaria acontece de 00:00 ate 23:59:59
-- Cada usuario pode:
-    - Checar disponilidade do quarto
-    - fazer uma reserva (se datas disponiveis, e atender requisitos acima)
-    - cancelar uma reserva ** confirmar requisitos para cancelamento - é possivel cancelar uma reserva em andamento?
-    - modificar uma reserva ( se data disponivel) - é possivel  modificar uma reserva em andamento?
-- API nao precisa de autenticacao
+** How to execute?**
 
+1. go under folder:
+booking-api\Booking
 
-run:
-- dotnet ef migrations add InitialCreate --project ".\1.Presentation\Booking.Api\Booking.Api.csproj"
+2. execute migration:
+
+dotnet ef database update --project ".\4.Infra\Booking.Infrastructure.DatabaseEFCore\Booking.Infrastructure.DatabaseEFCore.csproj" --connection "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Booking;Persist Security Info=True; Integrated Security=True;"
+
+3. run project
+
+** Swagger**
+https://localhost:7056/swagger/index.html
+
+** Existent data**
+The project contains two existent users, and an existent room that are created from seed's migration.

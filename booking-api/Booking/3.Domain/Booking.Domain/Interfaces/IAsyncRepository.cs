@@ -18,8 +18,8 @@ namespace Booking.Domain.Interfaces
 
         Task<T> GetByIdAsync(Guid userId);
 
-        Task<IQueryable<T>> GetAllAsync();
+        IQueryable<T> GetAllAsync();
 
-        Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> expression);
+        IQueryable<T> Get(Expression<Func<T, bool>> expression);
     }
 }

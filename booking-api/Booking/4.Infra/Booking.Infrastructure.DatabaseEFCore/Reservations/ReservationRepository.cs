@@ -1,11 +1,7 @@
 ﻿using Booking.Domain.Reservations;
 using Booking.Infrastructure.DatabaseEFCore.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Booking.Infrastructure.DatabaseEFCore.Reservations
 {
@@ -21,31 +17,35 @@ namespace Booking.Infrastructure.DatabaseEFCore.Reservations
         public async Task AddAsync(Reservation entity)
         {
             await _context.Reservations.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateAsync(Reservation entity)
+        {
+            _context.Reservations.Update(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(Reservation entity)
+        public async Task DeleteAsync(Reservation entity)
         {
-            throw new NotImplementedException();
+            _context.Reservations.Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IQueryable<Reservation>> GetAllAsync()
+        public IQueryable<Reservation> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return _context.Reservations.AsQueryable();
         }
 
-        public Task<IQueryable<Reservation>> GetAsync(Expression<Func<Reservation, bool>> expression)
+        public IQueryable<Reservation> Get(Expression<Func<Reservation, bool>> expression)
         {
-            throw new NotImplementedException();
+            var queryable = _context.Reservations.Where(expression).AsQueryable();
+
+            return queryable;
         }
 
-        public Task<Reservation> GetByIdAsync(Guid userId)
+        public async Task<Reservation> GetByIdAsync(Guid reservationId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Reservation entity)
-        {
-            throw new NotImplementedException();
-        }
+            return await _context.Reservations.Where(x => x.Id == reservationId).FirstOrDefaultAsync();
+        }        
     }
 }

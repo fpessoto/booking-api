@@ -1,89 +1,70 @@
-﻿//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using Booking.Api.DTOs;
-//using Booking.Api.Services;
-//using Booking.Api.ViewModels;
-//using Booking.Application.Commands;
-//using Booking.Domain.Exceptions;
-//using Booking.Domain.Users;
+﻿using Microsoft.AspNetCore.Mvc;
+using Booking.Api.DTOs;
+using Booking.Domain.Exceptions;
+using Booking.Application.Interfaces;
+using Booking.Application.Contracts;
 
-//namespace Booking.Api.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class UserController : ControllerBase
-//    {
-//        private readonly IUserRepository _userRepository;
-//        ICommand<UserSignupCommand, User> _signupCommand;
+namespace Booking.Api.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly IUserService _userService;
 
-//        public UserController(IUserRepository userRepository, ICommand<UserSignupCommand, User> command)
-//        {
-//            _userRepository = userRepository;
-//            _signupCommand = command;
-//        }
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
 
-//        [HttpPost]
-//        [Route("signup")]
-//        public async Task<ActionResult<dynamic>> Signup([FromBody] UserAuth model)
-//        {
-//            try
-//            {
-//                var cmd = new UserSignupCommand
-//                {
-//                    Email = model.Email,
-//                    Password = model.Password,
-//                    Username = model.Email
-//                };
+        public IUserService UserService { get; }
 
-//                var newUser = await _signupCommand.ExecuteAsync(cmd);
-//                newUser.Password = "";
+        [HttpPost]
+        [Route("")]
+        public async Task<ActionResult<dynamic>> Create([FromBody] UserCreateDTO dto)
+        {
+            try
+            {
+                var request = new CreateUserRequest
+                {
+                    Email = dto.Email,
+                    Password = dto.Password,
+                    Username = dto.Username
+                };
 
-//                return Ok(newUser);
-//            }
-//            catch (BusinessException e)
-//            {
-//                return BadRequest(e.Message);
-//            }
-//            catch (Exception)
-//            {
-//                return StatusCode(500);
-//            }
-//        }
+                var newUser = await _userService.Create(request);
 
-//        [HttpPost]
-//        [Route("login")]
-//        public async Task<ActionResult<dynamic>> Authenticate([FromBody] UserAuth model)
-//        {
-//            try
-//            {
-//                // Recupera o usuário
-//                var user = await _userRepository.GetAsync(model.Email, model.Password);
+                return Ok(newUser);
+            }
+            catch (BusinessException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
 
-//                // Verifica se o usuário existe
-//                if (user == null)
-//                    return NotFound(new { message = "Usuário ou senha inválidos" });
+        [HttpGet]
+        [Route("")]
+        public async Task<ActionResult<IList<UserResponse>>> Get()
+        {
+            try
+            {
+                var users = await _userService.GetAll();
 
-//                // Gera o Token
-//                var token = TokenService.GenerateToken(user);
+                return Ok(users);
+            }
+            catch (BusinessException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
 
-//                // Oculta a senha
-//                user.Password = "";
-
-//                // Retorna os dados
-//                return Ok(new
-//                {
-//                    user = user.ToViewModel(),
-//                    token = token
-//                });
-//            }
-//            catch (BusinessException e)
-//            {
-//                return BadRequest(e.Message);
-//            }
-//            catch (Exception)
-//            {
-//                return StatusCode(500);
-//            }
-//        }
-//    }
-//}
+    }
+}

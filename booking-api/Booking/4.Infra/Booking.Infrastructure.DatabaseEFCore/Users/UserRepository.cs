@@ -32,12 +32,12 @@ namespace Booking.Infrastructure.DatabaseEFCore.Users
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<User>> GetAllAsync()
+        public IQueryable<User> GetAllAsync()
         {
             return _context.Users.AsNoTracking();
         }
 
-        public async Task<IQueryable<User>> GetAsync(Expression<Func<User, bool>> expression)
+        public IQueryable<User> Get(Expression<Func<User, bool>> expression)
         {
             var usersQueryable = _context.Users.AsNoTracking().Where(expression).AsQueryable();
 

@@ -4,6 +4,7 @@ using Booking.Infrastructure.DatabaseEFCore.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Infrastructure.DatabaseEFCore.Migrations
 {
     [DbContext(typeof(BookingDBContext))]
-    partial class BookingDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220920120507_update2")]
+    partial class update2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
