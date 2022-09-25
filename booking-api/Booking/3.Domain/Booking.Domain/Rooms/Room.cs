@@ -10,5 +10,9 @@ namespace Booking.Domain.Rooms
     public class Room : Entity
     {
         public string Description { get; set; }
+
+        public Room(){
+            Id = Guid.NewGuid();
+        }
     }
 }

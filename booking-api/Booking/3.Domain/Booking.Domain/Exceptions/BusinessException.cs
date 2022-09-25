@@ -9,7 +9,7 @@ namespace Booking.Domain.Exceptions
 {
     public class BusinessException : Exception
     {
-        public BusinessException(ErrorCodes errorCode, string message) : base(message)
+        public BusinessException(ErrorCodes errorCode, string message="") : base(message)
         {
             ErrorCode = errorCode;
         }

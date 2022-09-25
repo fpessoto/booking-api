@@ -9,8 +9,9 @@ namespace Booking.Domain.Exceptions
         {
         }
 
-        public EmailAlreadyExistsException(string? message) : base(ErrorCodes.AlreadyExists, message)
+        public EmailAlreadyExistsException(string message) : base(ErrorCodes.AlreadyExists, message)
         {
+            if(message == null) throw new ArgumentException(); 
         }
 
     }

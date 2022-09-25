@@ -8,16 +8,18 @@ namespace Booking.Domain.Users
         public string Email { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
+        
+        public  User(){}
 
-        public void Create(string email, string password, string username, string role)
+        public  User(string email, string password, string username, string role)
         {
             Id = Guid.NewGuid();
             Email = email;
             Password = password;
             Username = username;
             Role = role;
-            CreatedDate = DateTime.Now;
-            UpdatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
+            UpdatedDate = DateTime.UtcNow;
         }
     }
 }
