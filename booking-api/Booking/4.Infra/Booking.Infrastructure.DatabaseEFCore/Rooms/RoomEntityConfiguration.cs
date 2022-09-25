@@ -14,8 +14,8 @@ namespace Booking.Infrastructure.DatabaseEFCore.Rooms
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Description);
-            builder.Property(x => x.CreatedDate);
-            builder.Property(x => x.UpdatedDate);
+            builder.Property(x => x.CreatedDate).HasColumnType("timestamp without time zone");
+            builder.Property(x => x.UpdatedDate).HasColumnType("timestamp without time zone");
         }
     }
 }

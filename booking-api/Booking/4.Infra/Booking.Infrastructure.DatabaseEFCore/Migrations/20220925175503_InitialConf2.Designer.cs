@@ -3,6 +3,7 @@ using System;
 using Booking.Infrastructure.DatabaseEFCore.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Booking.Infrastructure.DatabaseEFCore.Migrations
 {
     [DbContext(typeof(BookingDBContext))]
-    partial class BookingDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220925175503_InitialConf2")]
+    partial class InitialConf2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,9 +80,9 @@ namespace Booking.Infrastructure.DatabaseEFCore.Migrations
                         new
                         {
                             Id = new Guid("c83a4a7c-ccfd-4625-ae23-98cf9f62ba2a"),
-                            CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Utc).AddTicks(4636),
+                            CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Unspecified).AddTicks(4636),
                             Description = "The best room in the world! Beautiful view!",
-                            UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Utc).AddTicks(1509)
+                            UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Unspecified).AddTicks(1509)
                         });
                 });
 
@@ -130,11 +132,11 @@ namespace Booking.Infrastructure.DatabaseEFCore.Migrations
                         new
                         {
                             Id = new Guid("d6df6771-ef40-4713-81d5-a0429cd34ab9"),
-                            CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Utc).AddTicks(4636),
+                            CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Unspecified).AddTicks(4636),
                             Email = "guest@gmail.com",
                             Password = "guest",
                             Role = "guest",
-                            UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Utc).AddTicks(1509),
+                            UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Unspecified).AddTicks(1509),
                             Username = "guest"
                         });
                 });

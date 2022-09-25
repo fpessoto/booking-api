@@ -19,8 +19,8 @@ namespace Booking.Infrastructure.DatabaseEFCore.Users
             builder.Property(item => item.Email);
             builder.Property(item => item.Password);
             builder.Property(item => item.Role);
-            builder.Property(item => item.CreatedDate);
-            builder.Property(item => item.UpdatedDate);
+            builder.Property(item => item.CreatedDate).HasColumnType("timestamp without time zone");
+            builder.Property(item => item.UpdatedDate).HasColumnType("timestamp without time zone");
             builder.Property(item => item.Username);
         }
     }

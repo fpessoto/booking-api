@@ -14,8 +14,8 @@ namespace Booking.Infrastructure.DatabaseEFCore.Extensions
                 Password = "admin",
                 Role = "admin",
                 Username = "admin",
-                CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Local).AddTicks(4636),
-                UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Local).AddTicks(1509)
+                CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755).AddTicks(4636),
+                UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758).AddTicks(1509)
             };
 
             var guest = new User
@@ -25,8 +25,8 @@ namespace Booking.Infrastructure.DatabaseEFCore.Extensions
                 Password = "guest",
                 Role = "guest",
                 Username = "guest",
-                CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Local).AddTicks(4636),
-                UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Local).AddTicks(1509)
+                CreatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 755, DateTimeKind.Utc).AddTicks(4636),
+                UpdatedDate = new DateTime(2022, 3, 30, 16, 14, 37, 758, DateTimeKind.Utc).AddTicks(1509)
             };
 
             builder.Entity<User>().HasData(user1, guest);

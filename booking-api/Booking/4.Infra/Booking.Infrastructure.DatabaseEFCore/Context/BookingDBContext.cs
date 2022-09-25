@@ -13,6 +13,11 @@ namespace Booking.Infrastructure.DatabaseEFCore.Context
 {
     public class BookingDBContext : DbContext
     {
+        static BookingDBContext()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Room> Rooms { get; set; }
@@ -42,6 +47,8 @@ namespace Booking.Infrastructure.DatabaseEFCore.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // optionsBuilder.UseNpgsql(@"User ID=sa;Password=123456;Host=localhost;Port=55000;Database=Booking;Pooling=true;");
+
             optionsBuilder.UseChangeTrackingProxies(false);
             optionsBuilder.EnableDetailedErrors();
             optionsBuilder.UseLazyLoadingProxies(false);

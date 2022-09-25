@@ -23,37 +23,49 @@ namespace Booking.Domain.Reservations
             ValidationRangeDate(startDate, endDate);
 
             Id = Guid.NewGuid();
-            StartDate = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0, 0);
-            EndDate = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59, 999);
+            SetStartDate(startDate);
+            SetEndDate(endDate);
             UserId = userId;
             RoomId = roomId;
             IsActive = true;
-            CreatedDate = DateTime.Now;
-            UpdatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
+            UpdatedDate = DateTime.UtcNow;
         }
 
-        private void ValidationRangeDate(DateTime startDate, DateTime endDate)
-        {
-            if (startDate.Date >= endDate.Date) throw new BusinessException(ErrorCodes.Forbidden, "'End Date' should be greater than 'Start Date'");
-            if (endDate.Date.Subtract(startDate.Date).TotalDays > 3) throw new BusinessException(ErrorCodes.Forbidden, "The reservation period can not be longer than 3 days");
-            if (endDate.Date.Subtract(startDate.Date).TotalDays > 3) throw new BusinessException(ErrorCodes.Forbidden, "The reservation period can not be longer than 3 days");
-            if (startDate.Date.Subtract(DateTime.Now.Date).TotalDays > 30) throw new BusinessException(ErrorCodes.Forbidden, "The reservation can not be made with 30 days in advance");
-        }
 
         public void Update(DateTime startDate, DateTime endDate, Guid roomId)
         {
             ValidationRangeDate(startDate, endDate);
 
-            StartDate = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0, 0);
-            EndDate = new DateTime(endDate.Year, endDate.Month, endDate.Day, 23, 59, 59, 999);
+            SetStartDate(startDate);
+            SetEndDate(endDate);
             RoomId = roomId;
-            UpdatedDate = DateTime.Now;
+            UpdatedDate = DateTime.UtcNow;
         }
 
         public void Cancel()
         {
             if (!IsActive) throw new BusinessException(ErrorCodes.Forbidden, "This reservation is already canceled");
             IsActive = false;
+        }
+
+        private void SetStartDate(DateTime date)
+        {
+            StartDate = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, 0, DateTimeKind.Utc);
+        }
+
+
+        private void SetEndDate(DateTime date)
+        {
+            EndDate = new DateTime(date.Year, date.Month, date.Day, 23, 59, 59, 999, DateTimeKind.Utc);
+        }
+
+        private void ValidationRangeDate(DateTime startDate, DateTime endDate)
+        {
+            if (startDate.Date > endDate.Date) throw new BusinessException(ErrorCodes.Forbidden, "'End Date' should be greater than 'Start Date'");
+            if (endDate.Date.Subtract(startDate.Date).TotalDays > 3) throw new BusinessException(ErrorCodes.Forbidden, "The reservation period can not be longer than 3 days");
+            if (endDate.Date.Subtract(startDate.Date).TotalDays > 3) throw new BusinessException(ErrorCodes.Forbidden, "The reservation period can not be longer than 3 days");
+            if (startDate.Date.Subtract(DateTime.Now.Date).TotalDays > 30) throw new BusinessException(ErrorCodes.Forbidden, "The reservation can not be made with 30 days in advance");
         }
 
     }

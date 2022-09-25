@@ -24,6 +24,16 @@ booking-api\Booking
 
 dotnet ef database update --project ".\4.Infra\Booking.Infrastructure.DatabaseEFCore\Booking.Infrastructure.DatabaseEFCore.csproj" --connection "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Booking;Persist Security Info=True; Integrated Security=True;"
 
+dotnet ef database update --project "4.Infra/Booking.Infrastructure.DatabaseEFCore" --connection "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;" 
+
+Booking/4.Infra/Booking.Infrastructure.DatabaseEFCore
+
+
+ "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;" 
+
+--update migrations
+dotnet ef database update --project "4.Infra/Booking.Infrastructure.DatabaseEFCore/Booking.Infrastructure.DatabaseEFCore.csproj" --connection  "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;" 
+
 3. run project
 
 ** Swagger**
@@ -31,3 +41,8 @@ https://localhost:7056/swagger/index.html
 
 ** Existent data**
 The project contains two existent users, and an existent room that are created from seed's migration.
+
+
+4. running unit tests
+
+dotnet watch --project ./Tests/Booking.Application.UnitTest test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info

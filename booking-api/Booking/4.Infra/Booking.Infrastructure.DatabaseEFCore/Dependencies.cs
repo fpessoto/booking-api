@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 
 namespace Booking.Infrastructure.DatabaseEFCore
 {
@@ -10,24 +11,20 @@ namespace Booking.Infrastructure.DatabaseEFCore
         public static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
             var useOnlyInMemoryDatabase = false;
-            if (configuration["UseOnlyInMemoryDatabase"] != null)
-            {
-                useOnlyInMemoryDatabase = bool.Parse(configuration["UseOnlyInMemoryDatabase"]);
-            }
+            // if (configuration["UseOnlyInMemoryDatabase"] != null)
+            // {
+            //     useOnlyInMemoryDatabase = bool.Parse(configuration["UseOnlyInMemoryDatabase"]);
+            // }
 
-            if (useOnlyInMemoryDatabase)
-            {
+
+            // use real database
+            // Requires LocalDB which can be installed with SQL Server Express 2016
+            // https://www.microsoft.com/en-us/download/details.aspx?id=54284
+
+            Console.WriteLine(configuration.GetConnectionString("BookingConnection"));
                 services.AddDbContext<BookingDBContext>(c =>
-                   c.UseInMemoryDatabase("Booking"));
-            }
-            else
-            {
-                // use real database
-                // Requires LocalDB which can be installed with SQL Server Express 2016
-                // https://www.microsoft.com/en-us/download/details.aspx?id=54284
-                services.AddDbContext<BookingDBContext>(c =>
-                    c.UseSqlServer(configuration.GetConnectionString("BookingConnection")));
-            }
+                    c.UseNpgsql(configuration.GetConnectionString("BookingConnection")));
+            
         }
     }
 }

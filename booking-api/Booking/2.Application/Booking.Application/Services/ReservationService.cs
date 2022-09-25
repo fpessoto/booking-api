@@ -89,10 +89,10 @@ namespace Booking.Application.Services
                                                             .GetAllAsync());
             var existentReservations = queryable.Where(x =>
                                                                 (x.RoomId == roomId && x.IsActive == true) && (
-                                                                (x.EndDate >= startDate && x.EndDate <= endDate) ||
-                                                                (x.StartDate >= startDate && x.StartDate <= endDate)
+                                                                (x.EndDate.Date >= startDate.Date && x.EndDate.Date <= endDate.Date) ||
+                                                                (x.StartDate.Date >= startDate.Date && x.StartDate.Date <= endDate.Date)
                                                                 )
-                                                          );
+                                                          ).ToList();
 
             if (existentReservations.Any()) throw new BusinessException(Domain.Enums.ErrorCodes.Forbidden, "Invalid dates! Reservation already exists for this period!");
         }
