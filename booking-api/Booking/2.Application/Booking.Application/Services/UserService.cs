@@ -2,11 +2,6 @@
 using Booking.Application.Interfaces;
 using Booking.Domain.Exceptions;
 using Booking.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Booking.Application.Services
 {
@@ -24,8 +19,7 @@ namespace Booking.Application.Services
 
             if (existentUser?.Any() == true) throw new EmailAlreadyExistsException("This e-mail already exists! Try another one.");
 
-            var user = new User();
-            user.Create(request.Email, request.Password, request.Username, "user");
+            var user = new User(request.Email, request.Password, request.Username, "user");
 
             await _userRepository.AddAsync(user);
 

@@ -1,5 +1,8 @@
-﻿namespace Booking.Application.Contracts
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Booking.Application.Contracts
 {
+    [ExcludeFromCodeCoverage]
     public class Response<T>
     {
         public string? Message { get; set; }

@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Booking.Application.UnitTest
 {
-    public class ReservationServiceTest : IDisposable
+    public class ReservationServiceTest 
     {
         private Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IReservationRepository> _reservationRepositoryMock;
@@ -62,10 +62,10 @@ namespace Booking.Application.UnitTest
         [Fact]
         public async Task AddAsync_WithExistentReservation_ShouldThrowBusinessException()
         {
-            await ExistentReservation(new DateTime(2022, 1, 1), new DateTime(2022, 1, 2), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
-            await ExistentReservation(new DateTime(2022, 1, 1), new DateTime(2022, 1, 3), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
-            await ExistentReservation(new DateTime(2022, 1, 3), new DateTime(2022, 1, 5), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
-            await ExistentReservation(new DateTime(2022, 1, 4), new DateTime(2022, 1, 6), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+            await AddExistentReservation(new DateTime(2022, 1, 1), new DateTime(2022, 1, 2), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+            await AddExistentReservation(new DateTime(2022, 1, 1), new DateTime(2022, 1, 3), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+            await AddExistentReservation(new DateTime(2022, 1, 3), new DateTime(2022, 1, 5), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+            await AddExistentReservation(new DateTime(2022, 1, 4), new DateTime(2022, 1, 6), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
         }
 
         [Fact]
@@ -92,7 +92,111 @@ namespace Booking.Application.UnitTest
             ex.Message.Should().Be("User not found");
         }
 
-        private async Task ExistentReservation(DateTime existentStartDate, DateTime existentEndDate, DateTime reservationStartDate, DateTime reservationEndDate)
+        [Fact]
+        public async Task CancelAsync_WithInvaliReservation_ShouldThrowBusinessException(){
+
+            var request = new CancelReservationRequest{
+                ReservationId = Guid.NewGuid()
+            };
+
+              var ex = await Assert.ThrowsAsync<BusinessException>(
+                async () => await _sut.CancelAsync(request));
+            ex.Message.Should().Be("Reservation not found");
+        }
+
+        [Fact]
+        public async Task CancelAsync_ValidData_ShouldCancelWithSuccess(){
+
+            var request = new CancelReservationRequest{
+                ReservationId = Guid.NewGuid()
+            };
+
+            var reservartion = CreateValidReservation();
+
+            _reservationRepositoryMock.Setup(x=> x.GetByIdAsync( It.IsAny<Guid>())).ReturnsAsync(reservartion);
+
+            var response = await _sut.CancelAsync(request);
+
+            response.IsSuccess.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithValidRequest_ShouldUpdateReservationWithSuccess()
+        {
+            var userId = Guid.NewGuid();
+            var roomId = Guid.NewGuid();
+
+            var reservartion = CreateValidReservation();
+
+            var request = new UpdateReservationRequest
+            {
+                StartDate = new DateTime(2022, 1, 2),
+                EndDate = new DateTime(2022, 1, 4),
+                RoomId = roomId,
+                ReservationId = reservartion.Id
+            };
+
+            var reservations = new List<Reservation>
+            {
+                new Reservation(new DateTime(2022, 1, 11), new DateTime(2022, 1, 12), userId, roomId)
+            };
+
+            _reservationRepositoryMock.Setup(x=> x.GetByIdAsync( It.IsAny<Guid>())).ReturnsAsync(reservartion);
+
+            _reservationRepositoryMock.Setup(x => x.GetAllAsync()).Returns(reservations.AsQueryable());
+
+            var response = await _sut.UpdateAsync(request);
+
+            response.IsSuccess.Should().BeTrue();
+        }
+
+        [Fact]
+
+        public async Task Update_WithInvalidReservation_ShouldThrowNotFoundException(){
+            var userId = Guid.NewGuid();
+            var roomId = Guid.NewGuid();
+            var reservartion = CreateValidReservation();
+
+            var request = new UpdateReservationRequest
+            {
+                StartDate = reservartion.StartDate,
+                EndDate = reservartion.EndDate,
+                RoomId = roomId,
+                ReservationId = reservartion.Id
+            };
+
+            var ex = await Assert.ThrowsAsync<BusinessException>(
+                async () => await _sut.UpdateAsync(request));
+            ex.Message.Should().Be("Reservation not found");
+        }
+
+         [Fact]
+        public async Task Update_WithExistentReservation_ShouldThrowBusinessException()
+        {
+            await UpdateExistentReservation(new DateTime(2022, 1, 1), new DateTime(2022, 1, 3), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+            await UpdateExistentReservation(new DateTime(2022, 1, 3), new DateTime(2022, 1, 5), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+            await UpdateExistentReservation(new DateTime(2022, 1, 4), new DateTime(2022, 1, 6), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+            await UpdateExistentReservation(new DateTime(2022, 1, 1), new DateTime(2022, 1, 2), new DateTime(2022, 1, 2), new DateTime(2022, 1, 4));
+        }
+
+         [Fact]
+        public async Task Get_Should_ReturnReservationList()
+        {
+
+            var reservation = new List<Reservation>
+            {
+                CreateValidReservation(),
+                CreateValidReservation(),
+            };
+
+            _reservationRepositoryMock.Setup(x => x.GetAllAsync()).Returns(reservation.AsQueryable());
+
+            var response = _sut.Get();
+
+            response.Count.Should().Be(reservation.Count);
+        }
+
+        private async Task AddExistentReservation(DateTime existentStartDate, DateTime existentEndDate, DateTime reservationStartDate, DateTime reservationEndDate)
         {
             var userId = Guid.NewGuid();
             var roomId = Guid.NewGuid();
@@ -117,6 +221,40 @@ namespace Booking.Application.UnitTest
             var ex = await Assert.ThrowsAsync<BusinessException>(
                 async () => await _sut.AddAsync(request));
             ex.Message.Should().Be("Invalid dates! Reservation already exists for this period!");
+        }
+
+        private async Task UpdateExistentReservation(DateTime existentStartDate, DateTime existentEndDate, DateTime reservationStartDate, DateTime reservationEndDate)
+        {
+            var userId = Guid.NewGuid();
+            var roomId = Guid.NewGuid();
+            var reservartion = CreateValidReservation();
+
+            var request = new UpdateReservationRequest
+            {
+                StartDate = reservationStartDate,
+                EndDate = reservationEndDate,
+                RoomId = roomId,
+                ReservationId = reservartion.Id
+            };
+
+            var reservation = new List<Reservation>
+            {
+                new Reservation( existentStartDate, existentEndDate, userId, roomId)
+            };
+
+
+            _reservationRepositoryMock.Setup(x=> x.GetByIdAsync( It.IsAny<Guid>())).ReturnsAsync(reservartion);
+
+
+            _reservationRepositoryMock.Setup(x => x.GetAllAsync()).Returns(reservation.AsQueryable());
+
+            var ex = await Assert.ThrowsAsync<BusinessException>(
+                async () => await _sut.UpdateAsync(request));
+            ex.Message.Should().Be("Invalid dates! Reservation already exists for this period!");
+        }
+
+        private Reservation CreateValidReservation(){
+            return new Reservation(new DateTime(2022, 1, 1), new DateTime(2022, 1, 2), Guid.NewGuid(), Guid.NewGuid());
         }
 
         public void Dispose()
