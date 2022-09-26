@@ -1,8 +1,9 @@
-﻿using Booking.Domain.Enums;
-using System.Runtime.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using Booking.Domain.Enums;
 
 namespace Booking.Domain.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class EmailAlreadyExistsException : BusinessException
     {
         public EmailAlreadyExistsException() : base(ErrorCodes.AlreadyExists, "")

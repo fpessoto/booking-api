@@ -2,10 +2,6 @@
 using Booking.Domain.Reservations;
 using FluentAssertions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Booking.Domain.UnitTest
@@ -18,27 +14,54 @@ namespace Booking.Domain.UnitTest
             var userId = Guid.NewGuid();
             var roomId = Guid.NewGuid();
 
-            var reservatation = new Reservation(new DateTime(2022, 1, 11), new DateTime(2022, 1, 12), userId, roomId);
+            var today = DateTime.Today;
+
+            var reservatation = new Reservation(today, today.AddDays(2), userId, roomId);
 
             reservatation.IsActive.Should().BeTrue();
             reservatation.UserId.Should().Be(userId);
             reservatation.RoomId.Should().Be(roomId);
-            
-            reservatation.StartDate.Year.Should().Be(2022);
-            reservatation.StartDate.Month.Should().Be(1);
-            reservatation.StartDate.Day.Should().Be(11);
+
+            reservatation.StartDate.Date.Should().Be(today.Date);
             reservatation.StartDate.Hour.Should().Be(0);
             reservatation.StartDate.Minute.Should().Be(0);
             reservatation.StartDate.Second.Should().Be(0);
             reservatation.StartDate.Kind.Should().Be(DateTimeKind.Utc);
 
-            reservatation.EndDate.Year.Should().Be(2022);
-            reservatation.EndDate.Month.Should().Be(1);
-            reservatation.EndDate.Day.Should().Be(12);
+            reservatation.EndDate.Date.Should().Be(today.AddDays(2).Date);
             reservatation.EndDate.Hour.Should().Be(23);
             reservatation.EndDate.Minute.Should().Be(59);
             reservatation.EndDate.Second.Should().Be(59);
             reservatation.EndDate.Kind.Should().Be(DateTimeKind.Utc);
+        }
+
+        [Fact]
+        public void CreateInstance_WithDurationHigherThan3Days_ShouldThrowBusinessException()
+        {
+            var userId = Guid.NewGuid();
+            var roomId = Guid.NewGuid();
+
+            var today = DateTime.Today;
+
+            Assert.Throws<BusinessException>(() => new Reservation(today, today.AddDays(3), userId, roomId));
+        }
+
+        [Fact]
+        public void CreateInstance_With30DaysInAdvance_ShouldThrowBusinessException()
+        {
+            var userId = Guid.NewGuid();
+            var roomId = Guid.NewGuid();
+
+            Assert.Throws<BusinessException>(() => new Reservation(DateTime.Today.AddDays(30), DateTime.Today.AddDays(31), userId, roomId));
+        }
+
+        [Fact]
+        public void CreateInstance_WithStartDateGreatherThanEndDate_ShouldThrowBusinessException()
+        {
+            var userId = Guid.NewGuid();
+            var roomId = Guid.NewGuid();
+
+            Assert.Throws<BusinessException>(() => new Reservation(new DateTime(2022, 1, 13), new DateTime(2022, 1, 12), userId, roomId));
         }
 
         [Fact]
@@ -96,6 +119,5 @@ namespace Booking.Domain.UnitTest
 
             resertation.IsActive.Should().BeFalse();
         }
-
     }
 }

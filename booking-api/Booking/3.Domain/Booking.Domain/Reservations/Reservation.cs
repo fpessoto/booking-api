@@ -16,8 +16,6 @@ namespace Booking.Domain.Reservations
 
         public bool IsActive { get; private set; }
 
-        public Reservation() { }
-
         public Reservation(DateTime startDate, DateTime endDate, Guid userId, Guid roomId)
         {
             ValidationRangeDate(startDate, endDate);
@@ -63,9 +61,8 @@ namespace Booking.Domain.Reservations
         private void ValidationRangeDate(DateTime startDate, DateTime endDate)
         {
             if (startDate.Date > endDate.Date) throw new BusinessException(ErrorCodes.Forbidden, "'End Date' should be greater than 'Start Date'");
-            if (endDate.Date.Subtract(startDate.Date).TotalDays > 3) throw new BusinessException(ErrorCodes.Forbidden, "The reservation period can not be longer than 3 days");
-            if (endDate.Date.Subtract(startDate.Date).TotalDays > 3) throw new BusinessException(ErrorCodes.Forbidden, "The reservation period can not be longer than 3 days");
-            if (startDate.Date.Subtract(DateTime.Now.Date).TotalDays > 30) throw new BusinessException(ErrorCodes.Forbidden, "The reservation can not be made with 30 days in advance");
+            if (startDate.Date.AddDays(3) <= endDate.Date) throw new BusinessException(ErrorCodes.Forbidden, "The reservation period can not be longer than 3 days");
+            if (startDate.Date >= DateTime.Today.AddDays(30).Date ) throw new BusinessException(ErrorCodes.Forbidden, "The reservation can not be made with 30 days in advance");
         }
 
     }

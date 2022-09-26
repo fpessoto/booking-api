@@ -1,12 +1,9 @@
 ﻿using Booking.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Booking.Domain.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class BusinessException : Exception
     {
         public BusinessException(ErrorCodes errorCode, string message="") : base(message)

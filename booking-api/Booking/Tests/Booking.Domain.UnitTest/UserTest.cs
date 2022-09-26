@@ -17,6 +17,7 @@ namespace Booking.Domain.UnitTest
         public void CreateInstance_WithValidInformation_ShouldCreateWithoutError()
         {
             var user = new User("teste@test.com","test","test","user");
+            var user2 = new User();
         
             user.Id.Should().NotBeEmpty();
         }
