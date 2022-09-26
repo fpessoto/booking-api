@@ -9,6 +9,8 @@ namespace Booking.Domain.Users
 {
     public interface IUserRepository : IAsyncRepository<User>
     {
-        Task<User> GetAsync(string email, string password);
+        Task<User?> GetAsync(string email, string password);
+
+        Task<User?> GetAsync(string email);
     }
 }

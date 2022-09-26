@@ -15,9 +15,9 @@ namespace Booking.Application.Services
         }
         public async Task<Response<UserResponse>> Create(CreateUserRequest request)
         {
-            var existentUser = (_userRepository.GetAllAsync()).Where(x => x.Email == request.Email);
+            var existentUser = (await _userRepository.GetAsync(request.Email));
 
-            if (existentUser?.Any() == true) throw new EmailAlreadyExistsException("This e-mail already exists! Try another one.");
+            if (existentUser != null) throw new EmailAlreadyExistsException("This e-mail already exists! Try another one.");
 
             var user = new User(request.Email, request.Password, request.Username, "user");
 
