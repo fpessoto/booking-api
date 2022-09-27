@@ -1,4 +1,5 @@
-**CHALLENGE**s
+# CHALLENGE
+
 Post-Covid scenario:
 People are now free to travel everywhere but because of the pandemic, a lot of hotels
 went bankrupt. Some former famous travel places are left with only one hotel.
@@ -15,28 +16,27 @@ and can’t be reserved more than 30 days in advance.
 - Every end-user can check the room availability, place a reservation, cancel it or modify it.
 - To simplify the API is insecure.
 
-**How to execute?**
+## How to execute?
 
-1. go under folder:
-booking-api\Booking
+### 1. go under folder:
+```booking-api\Booking```
 
-2. execute migration and running db:
+### 2. execute migration and running db:
 
-docker-compose -f docker-compose.yml up
+```docker-compose -f docker-compose.yml up```
 
 --update migrations
-dotnet ef database update --project "4.Infra/Booking.Infrastructure.DatabaseEFCore/Booking.Infrastructure.DatabaseEFCore.csproj" --connection  "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;"
+```dotnet ef database update --project "4.Infra/Booking.Infrastructure.DatabaseEFCore/Booking.Infrastructure.DatabaseEFCore.csproj" --connection "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;"```
 
-3. run project
+### 3. run project
 
-**Swagger**
-<https://localhost:7056/swagger/index.html>
+[Swagger](https://localhost:7056/swagger/index.html)
 
 **Existent data**
 The project contains two existent users, and an existent room that are created from seed's migration.
 
-4. running unit tests
+### 4. running unit tests
 
-dotnet watch --project ./Tests/Booking.Domain.UnitTest test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info
+```dotnet watch --project ./Tests/Booking.Domain.UnitTest test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info```
 
-dotnet watch --project ./Tests/Booking.Application.UnitTest test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info
+```dotnet watch --project ./Tests/Booking.Application.UnitTest test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info```
