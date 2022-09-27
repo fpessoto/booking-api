@@ -51,12 +51,12 @@ namespace Booking.Infrastructure.DatabaseEFCore.Users
 
         public  async Task<User?> GetAsync(string email, string password)
         {
-            return await _context.Users.AsNoTracking().FirstAsync(u => u.Email == email && u.Password == password);
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
         }
 
         public async Task<User?> GetAsync(string email)
         {
-            return await _context.Users.FirstAsync(u => u.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
     }
 }
