@@ -18,10 +18,11 @@ and can’t be reserved more than 30 days in advance.
 
 ## How to execute?
 
-### 1. go under folder:
+### 1. go under folder
+
 ```booking-api\Booking```
 
-### 2. execute migration and running db:
+### 2. execute migration and running db
 
 ```docker-compose -f docker-compose.yml up```
 
