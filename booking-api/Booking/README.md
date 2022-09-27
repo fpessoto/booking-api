@@ -20,15 +20,9 @@ and can’t be reserved more than 30 days in advance.
 1. go under folder:
 booking-api\Booking
 
-2. execute migration:
+2. execute migration and running db:
 
-dotnet ef database update --project ".\4.Infra\Booking.Infrastructure.DatabaseEFCore\Booking.Infrastructure.DatabaseEFCore.csproj" --connection "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Booking;Persist Security Info=True; Integrated Security=True;"
-
-dotnet ef database update --project "4.Infra/Booking.Infrastructure.DatabaseEFCore" --connection "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;"
-
-Booking/4.Infra/Booking.Infrastructure.DatabaseEFCore
-
-"User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;"
+docker-compose -f docker-compose.yml up
 
 --update migrations
 dotnet ef database update --project "4.Infra/Booking.Infrastructure.DatabaseEFCore/Booking.Infrastructure.DatabaseEFCore.csproj" --connection  "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=Booking;Pooling=true;"
